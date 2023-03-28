@@ -12,7 +12,7 @@ class AnimationPage extends StatefulWidget {
 class _AnimationPageState extends State<AnimationPage> with SingleTickerProviderStateMixin {
   late AnimationController animationController;
   late Animation<double> animation;
-  
+
   @override
   void initState() {
     // TODO: implement initState
@@ -25,23 +25,20 @@ class _AnimationPageState extends State<AnimationPage> with SingleTickerProvider
     final curvedAnimation = CurvedAnimation(
         parent: animationController,
         curve: Curves.bounceIn,
-      reverseCurve: Curves.easeOut
+        reverseCurve: Curves.easeOut
     );
 
     animation = Tween<double>(
       begin: 0,
       end: 2 * math.pi,
     ).animate(curvedAnimation)
-    ..addListener(() {
-      setState(() {});
-    })
-    ..addStatusListener((status) {
-      if(status == AnimationStatus.completed){
-        animationController.reverse();
-      }else if(status == AnimationStatus.dismissed){
-        animationController.forward();
-      }
-    });
+      ..addStatusListener((status) {
+        if(status == AnimationStatus.completed){
+          animationController.reverse();
+        }else if(status == AnimationStatus.dismissed){
+          animationController.forward();
+        }
+      });
 
     animationController.forward();
   }
@@ -49,14 +46,7 @@ class _AnimationPageState extends State<AnimationPage> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Transform.rotate(
-          angle: animation.value,
-        child: Container(
-          alignment: Alignment.center,
-          padding: const  EdgeInsets.all(30),
-          child: Image.asset(Assets.resocode),
-        ),
-      ),
+      body: ResocoderImage(animation: animation,),
     );
   }
 
@@ -67,3 +57,24 @@ class _AnimationPageState extends State<AnimationPage> with SingleTickerProvider
     super.dispose();
   }
 }
+
+
+
+
+class ResocoderImage extends AnimatedWidget  {
+  Animation<double> animation;
+  ResocoderImage({Key? key, required this.animation}) : super(key: key, listenable: animation);
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.rotate(
+      angle: animation.value,
+      child: Container(
+        alignment: Alignment.center,
+        padding: const  EdgeInsets.all(30),
+        child: Image.asset(Assets.resocode),
+      ),
+    );
+  }
+}
+

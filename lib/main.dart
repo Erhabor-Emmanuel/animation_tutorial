@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'basic_animation_page.dart';
+import 'animated_widget_page.dart';
 
 void main() {
   runApp(const MyApp());

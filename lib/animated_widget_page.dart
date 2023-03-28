@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'const/assets.dart';
 import 'dart:math' as math;
 
-class AnimationPage extends StatefulWidget {
-  const AnimationPage({Key? key}) : super(key: key);
+class AnimatedPage extends StatefulWidget {
+  const  AnimatedPage({Key? key}) : super(key: key);
 
   @override
-  State<AnimationPage> createState() => _AnimationPageState();
+  State<AnimatedPage> createState() => _AnimatedPageState();
 }
 
-class _AnimationPageState extends State<AnimationPage> with SingleTickerProviderStateMixin {
+class _AnimatedPageState extends State<AnimatedPage> with SingleTickerProviderStateMixin {
   late AnimationController animationController;
   late Animation<double> animation;
 
@@ -46,7 +46,10 @@ class _AnimationPageState extends State<AnimationPage> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ResocoderImage(animation: animation,),
+      body: RotatingTransition(
+          angle: animation,
+          child:  const ResocoderImage(),
+      ),
     );
   }
 
@@ -58,23 +61,58 @@ class _AnimationPageState extends State<AnimationPage> with SingleTickerProvider
   }
 }
 
-
-
-
-class ResocoderImage extends AnimatedWidget  {
-  Animation<double> animation;
-  ResocoderImage({Key? key, required this.animation}) : super(key: key, listenable: animation);
+class RotatingTransition extends StatelessWidget {
+  final Widget child;
+  final Animation<double> angle;
+  const RotatingTransition({Key? key, required this.angle, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Transform.rotate(
-      angle: animation.value,
-      child: Container(
-        alignment: Alignment.center,
-        padding: const  EdgeInsets.all(30),
-        child: Image.asset(Assets.resocode),
-      ),
+    return AnimatedBuilder(
+        animation: angle,
+        child : child,
+      builder: (context, child){
+          return Transform.rotate(
+              angle: angle.value,
+            child: child,
+          );
+      },
     );
   }
 }
+
+
+class ResocoderImage extends StatelessWidget  {
+  const ResocoderImage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      padding: const  EdgeInsets.all(30),
+      child: Image.asset(Assets.resocode),
+    );
+  }
+}
+
+
+
+
+
+// class ResocoderImage extends AnimatedWidget  {
+//   Animation<double> animation;
+//   ResocoderImage({Key? key, required this.animation}) : super(key: key, listenable: animation);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Transform.rotate(
+//       angle: animation.value,
+//       child: Container(
+//         alignment: Alignment.center,
+//         padding: const  EdgeInsets.all(30),
+//         child: Image.asset(Assets.resocode),
+//       ),
+//     );
+//   }
+// }
 
